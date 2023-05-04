@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./db/
+      dockerfile: multistage_db.Dockerfile
+    container_name: db_compose
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+      - "db:/var/lib/postgresql/data"
+    networks:
+      - net-test
+  web:
+    build:
+      context: ./web/
+      dockerfile: multistage_web.Dockerfile
+    container_name: web_compose
+    ports:
+      - "8080:80"
+    networks:
+      - net-test
+  words:
+    build:
+      context: ./words/
+      dockerfile: multistage_words.Dockerfile
+    container_name: words_compose
+    ports:
+      - "8081:8080"
+    networks:
+      - net-test
+volumes:
+  db:
+networks:
+  net-test:
+  net-test-dos:
